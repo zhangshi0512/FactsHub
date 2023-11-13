@@ -1,0 +1,450 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0b101e;
+  color: #fafaf9;
+  font-family: "Sono", sans-serif;
+  padding: 48px 64px 0px;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+.hidden {
+  display: none !important;
+}
+
+.message {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 32px;
+  font-weight: 600;
+  margin-top: 24px;
+}
+
+.disputed {
+  color: #ef4444;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+/* MAIN LAYOUT */
+#root {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.sort-dropdown-container {
+  margin-left: auto; /* Aligns the dropdown to the right */
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap as needed */
+  gap: 16px; /* Adjust the gap to your preference */
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 48px;
+
+  height: calc(100vh - 48px - 68px - 40px);
+}
+
+@media (max-width: 900px) {
+  .main {
+    grid-template-columns: 1fr;
+    /* Fixed in a video text overlay, to fix scrolling issue on small screens */
+    height: auto;
+  }
+}
+
+section {
+  padding-bottom: 40px;
+
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* for Internet Explorer */
+  scrollbar-width: none; /* disable scroll bars for Firefox */
+}
+
+section::-webkit-scrollbar {
+  display: none; /* disable scroll bars for Chrome, Safari, Edge and Opera */
+}
+
+/* ELEMENTS */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo img {
+  width: 68px;
+  height: 68px;
+}
+
+h1 {
+  font-size: 42px;
+  text-transform: uppercase;
+  font-family: "Coiny", sans-serif;
+  line-height: 1;
+  margin-top: 6px;
+}
+
+.category {
+  margin-bottom: 16px;
+}
+
+.fact {
+  font-size: 16px;
+  line-height: 1.4;
+  background-color: #44403c;
+  margin-bottom: 16px;
+  padding: 16px 24px;
+  letter-spacing: -1px;
+  border-radius: 16px;
+
+  display: flex;
+  align-items: left;
+  gap: 24px;
+
+  flex-direction: column;
+}
+
+.fact-content {
+  margin-bottom: 12px; /* Space between content and footer */
+}
+
+.fact-image {
+  max-width: 600px; /* Ensure it is responsive and fits within its container */
+  max-height: 500px; /* Set a max height for the image */
+  object-fit: contain; /* Ensures the aspect ratio is preserved */
+  border-radius: 8px; /* Optional: Adds rounded corners to the image */
+  margin-top: 16px; /* Adds some space above the image */
+}
+
+.fact-header {
+  display: flex;
+  justify-content: space-between; /* Push title and date apart */
+  align-items: baseline; /* Align items on their baseline */
+  margin-bottom: 8px; /* Space between header and text */
+}
+
+.fact-title {
+  flex-grow: 1; /* Allow the title to take up available space */
+  margin-right: 16px; /* Space between title and date */
+}
+
+.fact-date {
+  white-space: nowrap; /* Prevent the date from wrapping */
+}
+
+.fact-footer {
+  display: flex;
+  align-items: center; /* Align tag and buttons */
+  justify-content: space-between; /* Push tag and buttons apart */
+}
+
+.fact-title,
+.fact-text {
+  color: #fafaf9; /* Set the text color to white */
+  text-decoration: none; /* Removes the underline from links */
+  cursor: pointer; /* Changes cursor to indicate clickable items */
+}
+
+.fact-title:hover,
+.fact-text:hover {
+  text-decoration: none; /* Ensures no underline appears on hover */
+  /* Other hover styles can be added here if desired */
+}
+
+.fact-title-link,
+.fact-text-link {
+  color: #fafaf9; /* Set the text color to white */
+  text-decoration: none; /* Removes the underline from links */
+}
+
+.fact-title-link:hover,
+.fact-text-link:hover {
+  text-decoration: none; /* Ensures no underline appears on hover */
+}
+
+@media (max-width: 1200px) {
+  .fact {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+}
+
+.tag {
+  text-transform: uppercase;
+  font-size: 12spx;
+  font-family: "Coiny", sans-serif;
+  padding-top: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 100px;
+  margin-right: 8px;
+}
+
+.vote-buttons {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+}
+
+.vote-buttons button {
+  border: none;
+  background-color: #78716c;
+  font-size: 18px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  color: inherit;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.vote-buttons button:hover {
+  background-color: #292524;
+}
+
+.vote-buttons button:disabled {
+  background-color: #44403c;
+}
+
+.tag,
+.vote-buttons button {
+  padding: 4px 12px; /* Smaller padding for compact display */
+  font-size: 14px; /* Smaller font size if necessary */
+}
+
+ul {
+  list-style: none;
+}
+
+.source:link,
+.source:visited {
+  color: #a8a29e;
+  text-decoration: none;
+  margin-left: 12px;
+  transition: 0.3s;
+}
+
+.source:hover,
+.source:active {
+  color: #3b82f6;
+}
+
+.btn {
+  border: none;
+  font-family: "Coiny", sans-serif;
+  line-height: 1;
+  text-transform: uppercase;
+  font-size: 17px;
+  padding: 16px 0 13px;
+  background-image: linear-gradient(135deg, #3bcef6, #cb81ff, #ffb860, #fa5748);
+  color: inherit;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: scale(110%) rotate(-2deg);
+}
+
+.btn-large {
+  font-size: 20px;
+  padding: 20px 24px 12px;
+  margin-bottom: 4px;
+}
+
+.btn-all-categories {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.btn-category {
+  width: 100%;
+  background-image: none;
+}
+
+.sort-toggle-container {
+  display: flex;
+  margin-top: 16px;
+  margin-bottom: 30px; /* Adjust as needed */
+  border-radius: 4px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 8px 16px; /* Adjust padding as needed */
+  border: none;
+  background: #78716c;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px;
+  margin: 4px;
+  font-family: "Coiny", sans-serif;
+  line-height: 1;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.toggle-btn.active {
+  background: #3b82f6; /* Adjust active color as needed */
+}
+
+.toggle-btn:hover {
+  transform: scale(110%) rotate(-2deg);
+}
+
+/* FACT FORM */
+.fact-form {
+  background-color: #44403c;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 16px;
+}
+
+.fact-form input,
+.fact-form select {
+  width: 220px;
+  background-color: #78716c;
+  border: none;
+  border-radius: 100px;
+  padding: 16px;
+  font-size: 18px;
+  color: inherit;
+  font-family: inherit;
+}
+
+.fact-form input::placeholder,
+.comment-form input::placeholder {
+  color: #a8a29e;
+}
+
+.fact-form input:first-child,
+.comment-form input:first-child {
+  flex-grow: 1;
+}
+
+.fact-form span {
+  font-weight: 600;
+  font-size: 18px;
+  margin-right: 18px;
+}
+
+@media (max-width: 1000px) {
+  body {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+  }
+
+  body::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+
+  .fact-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fact-form input,
+  .fact-form select {
+    width: auto;
+  }
+}
+
+/* Search bar styles */
+.search-bar {
+  width: 27%; /* To take the full width of its container */
+  background-color: #78716c;
+  border: none;
+  border-radius: 100px; /* Fully rounded corners for consistency */
+  padding: 16px;
+  font-size: 18px;
+  color: #fafaf9; /* This color should be the same as the color property of .fact-form input */
+  font-family: inherit;
+  outline: none; /* Removes the default focus outline to match the .fact-form input style */
+}
+
+.search-bar::placeholder {
+  color: #a8a29e;
+}
+
+/* If you want the search bar to grow and fill the space like the first child of fact-form */
+.header .search-bar {
+  flex-grow: 1;
+  margin-right: 16px; /* Adjust as needed */
+  margin-left: 16px;
+}
+
+/* Adjust media query for smaller screens */
+@media (max-width: 900px) {
+  .header .search-bar {
+    margin-right: 0; /* Remove margin for small screens */
+    margin-bottom: 16px; /* Space below search bar on small screens */
+  }
+}
+
+.main-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers the flex items horizontally */
+  width: 100%; /* Takes the full width of the parent */
+}
+
+.fact-detail,
+.comments,
+.comment-form {
+  width: 650px; /* Sets a base width */
+  max-width: 800px; /* Allows content to grow up to 800px */
+  margin: 16px auto; /* Centers the block horizontally and adds margin on the top and bottom */
+  padding: 16px 24px;
+  background-color: #44403c;
+  border-radius: 16px;
+  display: block; /* Changes display to block for consistent centering */
+}
+
+.comment-form {
+  padding: 16px 32px;
+}
+
+.new-comment-textarea {
+  width: 100%; /* Makes textarea take the full width of its parent */
+  padding: 8px;
+  border-radius: 20px;
+  background-color: #78716c;
+  color: #fafaf9;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  resize: vertical; /* Allows vertical resizing */
+  height: 150px; /* Adjusts the default height */
+}
+
+.new-comment-textarea::placeholder {
+  color: #a8a29e;
+}
