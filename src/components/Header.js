@@ -1,7 +1,7 @@
 import React from "react";
 
 function Header({ showForm, setShowForm, onSortChange, onSearchChange }) {
-  const appTitle = "Fun Facts Share !";
+  const appTitle = "Facts Hub";
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {

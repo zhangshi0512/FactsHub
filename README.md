@@ -1,8 +1,8 @@
-# Web Development Final Project - _Fun-Facts-Share_
+# Web Development Final Project - _Facts-Hub_
 
 Submitted by: **Shi Zhang**
 
-This web app: **insert description**
+This web app: **allows users to share different types of facts, vote and comment on existing facts.**
 
 Time spent: **X** hours spent in total
 
@@ -58,7 +58,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2023] [Shi Zhang]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
