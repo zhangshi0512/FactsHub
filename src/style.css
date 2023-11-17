@@ -325,11 +325,14 @@ ul {
   align-items: center;
   gap: 16px;
   border-radius: 16px;
+  flex-direction: column;
+  color: inherit;
 }
 
 .fact-form input,
-.fact-form select {
-  width: 220px;
+.fact-form select,
+.fact-form textarea {
+  width: 500px;
   background-color: #78716c;
   border: none;
   border-radius: 100px;
@@ -339,8 +342,14 @@ ul {
   font-family: inherit;
 }
 
+.fact-form textarea {
+  border-radius: 20px;
+  height: 150px;
+}
+
 .fact-form input::placeholder,
-.comment-form input::placeholder {
+.comment-form input::placeholder,
+.new-fact-textarea::placeholder {
   color: #a8a29e;
 }
 
@@ -447,4 +456,19 @@ ul {
 
 .new-comment-textarea::placeholder {
   color: #a8a29e;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px; /* Add space between rows */
+}
+
+.form-row > input,
+.form-row > textarea,
+.form-row > select {
+  max-width: 100%;
+  box-sizing: border-box;
+  flex: 1; /* Make input fields take up equal space */
+  margin-right: 10px; /* Add space between fields */
 }

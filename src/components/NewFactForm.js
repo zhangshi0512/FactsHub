@@ -5,9 +5,11 @@ import { CATEGORIES } from "../constants/categories";
 
 function NewFactForm({ setFacts, setShowForm }) {
   const [text, setText] = useState("");
-  // Fixed in a video text overlay
   const [source, setSource] = useState("");
   const [category, setCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [secretKey, setSecretKey] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const textLength = text.length;
 
@@ -22,7 +24,16 @@ function NewFactForm({ setFacts, setShowForm }) {
       setIsUploading(true);
       const { data: newFact, error } = await supabase
         .from("facts")
-        .insert([{ text, source, category }])
+        .insert([
+          {
+            text,
+            source,
+            category,
+            title,
+            image_url: imageUrl,
+            secret_key: secretKey,
+          },
+        ])
         .select();
       setIsUploading(false);
 
@@ -33,6 +44,9 @@ function NewFactForm({ setFacts, setShowForm }) {
       setText("");
       setSource("");
       setCategory("");
+      setTitle("");
+      setImageUrl("");
+      setSecretKey("");
 
       // 6. Close the form
       setShowForm(false);
@@ -41,36 +55,71 @@ function NewFactForm({ setFacts, setShowForm }) {
 
   return (
     <form className="fact-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Share a fact with the world..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        disabled={isUploading}
-      />
-      <span>{200 - textLength}</span>
-      <input
-        value={source}
-        type="text"
-        placeholder="Trustworthy source..."
-        onChange={(e) => setSource(e.target.value)}
-        disabled={isUploading}
-      />
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        disabled={isUploading}
-      >
-        <option value="">Choose category:</option>
-        {CATEGORIES.map((cat) => (
-          <option key={cat.name} value={cat.name}>
-            {cat.name.toUpperCase()}
-          </option>
-        ))}
-      </select>
-      <button className="btn btn-large" disabled={isUploading}>
-        Post
-      </button>
+      <div className="form-row">
+        <input
+          className="new-fact-title"
+          type="text"
+          placeholder="Fact title..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          disabled={isUploading}
+        />
+      </div>
+      <div className="form-row">
+        <textarea
+          className="new-fact-textarea"
+          placeholder="Share a fact with the world..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          disabled={isUploading}
+        />
+      </div>
+      <span>{200 - textLength} characters left</span>
+      <div className="form-row">
+        <input
+          value={source}
+          type="text"
+          placeholder="Trustworthy source URL..."
+          onChange={(e) => setSource(e.target.value)}
+          disabled={isUploading}
+        />
+        <input
+          type="text"
+          placeholder="Image URL (optional)..."
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+          disabled={isUploading}
+        />
+      </div>
+      <div className="form-row">
+        <input
+          type="text"
+          placeholder="Secret key for editing..."
+          value={secretKey}
+          onChange={(e) => setSecretKey(e.target.value)}
+          disabled={isUploading}
+        />
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          disabled={isUploading}
+        >
+          <option value="">Category:</option>
+          {CATEGORIES.map((cat) => (
+            <option key={cat.name} value={cat.name}>
+              {cat.name.toUpperCase()}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="form-row">
+        <button
+          className="btn btn-large"
+          disabled={isUploading || !text || !source || !category}
+        >
+          Post Fact
+        </button>
+      </div>
     </form>
   );
 }
