@@ -46,8 +46,9 @@ function App() {
   useEffect(() => {
     const filtered = facts.filter(
       (fact) =>
-        fact.title.toLowerCase().includes(searchTerm) ||
-        fact.text.toLowerCase().includes(searchTerm)
+        fact &&
+        (fact.title.toLowerCase().includes(searchTerm) ||
+          fact.text.toLowerCase().includes(searchTerm))
     );
     setFilteredFacts(filtered);
   }, [facts, searchTerm]);
@@ -89,7 +90,10 @@ function App() {
               </>
             }
           />
-          <Route path="/fact/:factId" element={<FactDetail />} />
+          <Route
+            path="/fact/:factId"
+            element={<FactDetail setFacts={setFacts} />}
+          />
         </Routes>
       </main>
     </Router>

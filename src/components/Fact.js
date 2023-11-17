@@ -10,17 +10,21 @@ function Fact({ fact, setFacts }) {
 
   async function handleVote(columnName) {
     setIsUpdating(true);
-    const { data: updatedFact, error } = await supabase
+    const { data, error } = await supabase
       .from("facts")
       .update({ [columnName]: fact[columnName] + 1 })
       .eq("id", fact.id)
       .select();
+
     setIsUpdating(false);
 
-    if (!error)
-      setFacts((facts) =>
-        facts.map((f) => (f.id === fact.id ? updatedFact[0] : f))
+    if (!error && data && data.length > 0) {
+      setFacts((prevFacts) =>
+        prevFacts.map((f) => (f.id === fact.id ? data[0] : f))
       );
+    } else {
+      console.error("Handle Vote Function Error on Home Page!", error);
+    }
   }
 
   // Function to format the timestamp

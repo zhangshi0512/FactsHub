@@ -56,20 +56,22 @@ function FactDetail({ setFacts }) {
 
   async function handleVote(columnName) {
     setIsUpdating(true);
-    const { data: updatedFact, error } = await supabase
+    const { data, error } = await supabase
       .from("facts")
       .update({ [columnName]: fact[columnName] + 1 })
       .eq("id", fact.id)
-      .single();
+      .select();
+
     setIsUpdating(false);
 
-    if (error) {
-      console.error("Error updating votes", error);
+    if (!error && data && data.length > 0) {
+      setFact(data[0]); // Update the local state
+      setFacts &&
+        setFacts((prevFacts) =>
+          prevFacts.map((f) => (f.id === data[0].id ? data[0] : f))
+        ); // Update the global state
     } else {
-      setFact((currentFact) => ({ ...currentFact, ...updatedFact }));
-      setFacts((prevFacts) =>
-        prevFacts.map((f) => (f.id === updatedFact.id ? updatedFact : f))
-      );
+      console.error("Handle Vote Function Error on Detail Page!", error);
     }
   }
 
@@ -89,39 +91,34 @@ function FactDetail({ setFacts }) {
       return;
     }
 
-    // Optimistic update: add the comment to the UI before the request completes
-    const optimisticComment = {
-      content: newComment,
-      user_id: "currentUserId", // Replace with actual current user's ID
-      created_at: new Date().toISOString(), // Use the current timestamp
-      id: Date.now(), // Temporary ID for the optimistic update
-    };
-    setComments((prevComments) => [...prevComments, optimisticComment]);
-    setNewComment(""); // Clear the input field
+    // Submit the new comment to Supabase
+    const { data, error: insertError } = await supabase
+      .from("comments")
+      .insert([
+        {
+          facts_id: factId,
+          content: newComment,
+        },
+      ]);
 
-    // Now, submit the new comment to the backend
-    const { data, error } = await supabase.from("comments").insert([
-      {
-        facts_id: factId,
-        content: newComment,
-      },
-    ]);
-
-    if (error) {
-      console.error("Error submitting comment", error);
-      // Rollback the optimistic update
-      setComments((prevComments) =>
-        prevComments.filter((comment) => comment.id !== optimisticComment.id)
-      );
+    if (insertError) {
+      console.error("Error submitting comment", insertError);
       alert("Failed to submit comment. Please try again.");
     } else {
-      // Replace the optimistic comment with the actual data from the backend
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === optimisticComment.id ? data[0] : comment
-        )
-      );
+      // Fetch the latest comments
+      const { data: latestComments, error: fetchError } = await supabase
+        .from("comments")
+        .select("*")
+        .eq("facts_id", factId);
+
+      if (fetchError) {
+        console.error("Error fetching comments", fetchError);
+      } else {
+        // Update the comments state with the latest comments
+        setComments(latestComments);
+      }
     }
+    setNewComment(""); // Clear the input field
   };
 
   // Function to format the timestamp
