@@ -6,6 +6,8 @@ This web app: **allows users to share different types of facts, vote and comment
 
 Time spent: **20** hours spent in total
 
+Here is the deployment on Netlify: https://factup.netlify.app/
+
 ## Required Features
 
 The following **required** functionality is completed:
