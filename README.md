@@ -2,9 +2,9 @@
 
 Submitted by: **Shi Zhang**
 
-This web app: **allows users to share different types of facts, vote and comment on existing facts.**
+This web app: **allows users to share different types of facts, vote and comment on existing facts. The user can also edit or delete existing facts by entering the secret key, which is set when the fact is posted.**
 
-Time spent: **X** hours spent in total
+Time spent: **20** hours spent in total
 
 ## Required Features
 
@@ -41,11 +41,11 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![video_walkthrough](Website_Demo.gif)
 
 <!-- Replace this with whatever GIF tool you used! -->
 
-GIF created with ...
+GIF created with LICEcap
 
 <!-- Recommended tools:
 [Kap](https://getkap.co/) for macOS

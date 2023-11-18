@@ -17,7 +17,7 @@ function App() {
   const [filteredFacts, setFilteredFacts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentCategory, setCurrentCategory] = useState("all");
-  const [sortOrder, setSortOrder] = useState("votesInteresting");
+  const [sortOrder, setSortOrder] = useState("created_at_asc");
   const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch and filter facts
@@ -25,18 +25,35 @@ function App() {
     async function getFacts() {
       setIsLoading(true);
       let query = supabase.from("facts").select("*");
+
       if (currentCategory !== "all") {
         query = query.eq("category", currentCategory);
       }
-      const { data, error } = await query
-        .order(sortOrder, { ascending: sortOrder === "created_at" })
-        .limit(1000);
-      setIsLoading(false);
-      if (error) {
-        console.error("Error fetching facts:", error);
-        return;
+
+      // Extract field and order from sortOrder
+      let [sortField, sortDirection] = sortOrder.split("_");
+      const isAscending = sortDirection === "asc";
+
+      // Check if sortField is 'created' and replace it with 'created_at'
+      if (sortField === "created") {
+        sortField = "created_at";
       }
-      setFacts(data);
+
+      try {
+        const { data, error } = await query
+          .order(sortField, { ascending: isAscending })
+          .limit(1000);
+
+        if (error) {
+          throw error;
+        }
+
+        setFacts(data);
+      } catch (error) {
+        console.error("Error fetching facts:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     getFacts();
@@ -57,8 +74,8 @@ function App() {
     setSearchTerm(term.toLowerCase());
   };
 
-  const handleSortChange = (order) => {
-    setSortOrder(order);
+  const handleSortChange = (newSortOrder) => {
+    setSortOrder(newSortOrder);
   };
 
   return (
