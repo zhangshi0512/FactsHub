@@ -349,7 +349,8 @@ ul {
 
 .fact-form input::placeholder,
 .comment-form input::placeholder,
-.new-fact-textarea::placeholder {
+.new-fact-textarea::placeholder,
+.input-style::placeholder {
   color: #a8a29e;
 }
 
@@ -408,6 +409,7 @@ ul {
   flex-grow: 1;
   margin-right: 16px; /* Adjust as needed */
   margin-left: 16px;
+  margin-bottom: 5px;
 }
 
 /* Adjust media query for smaller screens */
@@ -419,9 +421,11 @@ ul {
 }
 
 .main-detail {
+  margin-left: 285px;
   display: flex;
   flex-direction: column;
   align-items: center; /* Centers the flex items horizontally */
+  justify-content: center;
   width: 100%; /* Takes the full width of the parent */
 }
 
@@ -471,4 +475,36 @@ ul {
   box-sizing: border-box;
   flex: 1; /* Make input fields take up equal space */
   margin-right: 10px; /* Add space between fields */
+}
+
+.input-style {
+  width: 600px;
+  background-color: #78716c;
+  border: none;
+  border-radius: 100px;
+  padding: 16px;
+  font-size: 18px;
+  color: inherit;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+
+/* Apply .input-style to both modal inputs and fact form inputs */
+.modal input,
+.fact-form input {
+  /* This assumes you've added .input-style to your input elements in the JSX */
+  composes: input-style;
+}
+
+.new-fact-form-container {
+  margin-left: 340px;
+  display: flex;
+  justify-content: center; /* Centers children horizontally */
+  width: 100%; /* Take full width of the parent */
+}
+
+.NewFactForm {
+  justify-content: center;
+  width: 100%; /* Adjust to the desired width */
+  max-width: 800px; /* Or whatever maximum width you desire */
 }

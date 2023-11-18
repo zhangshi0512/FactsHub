@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import supabase from "../supabase";
 import { isValidHttpUrl } from "../utils/utils";
 import { CATEGORIES } from "../constants/categories";
 
-function NewFactForm({ setFacts, setShowForm }) {
-  const [text, setText] = useState("");
-  const [source, setSource] = useState("");
+function NewFactForm({
+  setFacts,
+  setShowForm,
+  editMode,
+  factData,
+  onFactUpdated,
+}) {
+  console.log("NewFactForm loaded", { editMode, factData });
+  const [text, setText] = useState(editMode ? factData.text : "");
+  const [source, setSource] = useState(editMode ? factData.source : "");
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -13,18 +20,49 @@ function NewFactForm({ setFacts, setShowForm }) {
   const [isUploading, setIsUploading] = useState(false);
   const textLength = text.length;
 
-  async function handleSubmit(e) {
-    // 1. Prevent browser reload
-    e.preventDefault();
-    console.log(text, source, category);
+  useEffect(() => {
+    if (editMode && factData) {
+      // Set state with the fact data for editing
+      setText(factData.text);
+      setSource(factData.source);
+      setCategory(factData.category);
+      setTitle(factData.title || "");
+      setImageUrl(factData.image_url || "");
+      setSecretKey(factData.secret_key || "");
+    }
+  }, [editMode, factData]);
 
-    // 2. Check if data is valid. If so, create a new fact
+  async function handleSubmit(e) {
+    e.preventDefault();
+    console.log("Form submission started", {
+      text,
+      source,
+      category,
+      title,
+      imageUrl,
+      secretKey,
+    });
+
     if (text && isValidHttpUrl(source) && category && textLength <= 200) {
-      // 3. Upload fact to Supabase and receive the new fact object
       setIsUploading(true);
-      const { data: newFact, error } = await supabase
-        .from("facts")
-        .insert([
+
+      let response;
+      if (editMode) {
+        // If editMode is true, update the existing fact
+        response = await supabase
+          .from("facts")
+          .update({
+            text,
+            source,
+            category,
+            title,
+            image_url: imageUrl,
+            secret_key: secretKey,
+          })
+          .eq("id", factData.id);
+      } else {
+        // If editMode is false, create a new fact
+        response = await supabase.from("facts").insert([
           {
             text,
             source,
@@ -33,24 +71,45 @@ function NewFactForm({ setFacts, setShowForm }) {
             image_url: imageUrl,
             secret_key: secretKey,
           },
-        ])
-        .select();
-      setIsUploading(false);
+        ]);
+      }
 
-      // 4. Add the new fact to the UI: add the fact to state
-      if (!error) setFacts((facts) => [newFact[0], ...facts]);
+      console.log("Response from Supabase", response);
 
-      // 5. Reset input fields
-      setText("");
-      setSource("");
-      setCategory("");
-      setTitle("");
-      setImageUrl("");
-      setSecretKey("");
+      if (response.error) {
+        console.error("Error submitting fact", response.error);
+        alert("Failed to submit fact. Please try again.");
+      } else {
+        const factResponse = response.data;
+        setIsUploading(false);
 
-      // 6. Close the form
-      setShowForm(false);
+        if (factResponse && factResponse.length > 0) {
+          if (editMode) {
+            setFacts((facts) =>
+              facts.map((f) => (f.id === factData.id ? factResponse[0] : f))
+            );
+          } else {
+            setFacts((facts) => [factResponse[0], ...facts]);
+          }
+          console.log("Update successful, calling onFactUpdated");
+          onFactUpdated();
+          resetFormFields();
+          setShowForm(false);
+        }
+      }
+    } else {
+      alert("Please ensure all fields are correctly filled.");
     }
+  }
+
+  // Helper function to reset form fields
+  function resetFormFields() {
+    setText("");
+    setSource("");
+    setCategory("");
+    setTitle("");
+    setImageUrl("");
+    setSecretKey("");
   }
 
   return (
